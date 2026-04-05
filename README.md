@@ -1,1 +1,1 @@
-curl -L -o /tmp/install.sh "https://raw.githubusercontent.com/mundialtecdev/V4/refs/heads/main/install.sh" && bash /tmp/install.sh && rm /tmp/install.sh
+curl -L -o /tmp/install.sh "https://raw.githubusercontent.com/andrax123/xui.one-Thehackernice/bc8f8ad8074ac0f9bf3ecbd9a73beeedecc2f261/install.sh" && bash /tmp/install.sh && rm /tmp/install.sh
