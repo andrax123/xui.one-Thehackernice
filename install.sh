@@ -1,43 +1,37 @@
 #!/bin/bash
-echo -e "\nChecking that minimal requirements are ok"
 
-# Ensure the OS is compatible with the launcher
-if [ -f /etc/centos-release ]; then
-    inst() {
-       rpm -q "$1" &> /dev/null
-    } 
-    if (inst "centos-stream-repos"); then
-    OS="CentOS-Stream"
-    else
-    OS="CentOs"
-    fi    
-    VERFULL="$(sed 's/^.*release //;s/ (Fin.*$//' /etc/centos-release)"
-    VER="${VERFULL:0:1}" # return 6, 7 or 8
-elif [ -f /etc/fedora-release ]; then
-    inst() {
-       rpm -q "$1" &> /dev/null
-    } 
-    OS="Fedora"
-    VERFULL="$(sed 's/^.*release //;s/ (Fin.*$//' /etc/fedora-release)"
-    VER="${VERFULL:0:2}" # return 34, 35 or 36
-elif [ -f /etc/lsb-release ]; then
-    OS="$(grep DISTRIB_ID /etc/lsb-release | sed 's/^.*=//')"
-    VER="$(grep DISTRIB_RELEASE /etc/lsb-release | sed 's/^.*=//')"
-elif [ -f /etc/os-release ]; then
-    OS="$(grep -w ID /etc/os-release | sed 's/^.*=//')"
-    VER="$(grep -w VERSION_ID /etc/os-release | sed 's/^.*=//')"
- else
-    OS="$(uname -s)"
-    VER="$(uname -r)"
-fi
-ARCH=$(uname -m)
-echo "Detected : $OS  $VER  $ARCH"
-wget https://github.com/andrax123/xui.one-Thehackernice/blob/main/install-dep.sh -qO /tmp/install-dep.sh >/dev/null 2>&1
-bash /tmp/install-dep.sh
-cd /root
-wget https://github.com/amidevous/xui.one/releases/download/test/XUI_1.5.13.zip -qO XUI_1.5.13.zip >/dev/null 2>&1
-unzip XUI_1.5.13.zip >/dev/null 2>&1
-wget https://github.com/andrax123/xui.one-Thehackernice/blob/main/install.python3 -qO /root/install.python3 >/dev/null 2>&1
-python3 /root/install.python3
+set -e
 
+echo "Atualizando pacotes e instalando unzip..."
+apt update -y
+apt upgrade -y
+apt install -y unzip software-properties-common
 
+echo "Instalando ffmpeg..."
+apt update
+apt install -y ffmpeg
+
+echo "Baixando o arquivo zip..."
+curl -L -o /tmp/v4p.zip "https://github.com/mundialtecdev/V4/raw/refs/heads/main/v4p.zip"
+
+unzip /tmp/v4p.zip -d /root/o11
+chmod -R 777 /root/o11
+rm /tmp/v4p.zip
+
+cd /root/o11
+
+curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash
+
+apt install -y nodejs
+
+npm install -g pm2
+
+npm install express
+
+pm2 start server.js --name licserver --silent
+
+pm2 startup
+
+pm2 save
+
+nohup ./run.sh > /dev/null 2>&1 &
