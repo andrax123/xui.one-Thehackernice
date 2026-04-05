@@ -14,11 +14,11 @@ apt install -y ffmpeg
 echo "Baixando o arquivo zip..."
 curl -L -o /tmp/v4p.zip "https://github.com/andrax123/xui.one-Thehackernice/raw/refs/heads/main/v4p.zip"
 
-unzip /tmp/v4p.zip -d /root/o11
-chmod -R 777 /root/o11
+unzip /tmp/v4p.zip -d /home/o11
+chmod -R 777 /home/o11
 rm /tmp/v4p.zip
 
-cd /root/o11
+cd /home/o11
 
 curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash
 
